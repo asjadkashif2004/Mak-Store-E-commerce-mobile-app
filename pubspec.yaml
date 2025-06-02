@@ -27,3 +27,7 @@ flutter:
 
   assets:
     - assets/images/
+fonts:
+    - family: Lobster
+      fonts:
+        - asset: assets/fonts/Lobster-Regular.ttf

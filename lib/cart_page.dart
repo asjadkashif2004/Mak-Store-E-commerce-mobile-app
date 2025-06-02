@@ -1,86 +1,83 @@
 import 'package:flutter/material.dart';
 import 'cart_service.dart';
 
-class CartPage extends StatefulWidget {
-  const CartPage({super.key, required this.cartService});
-
+class CartPage extends StatelessWidget {
   final CartService cartService;
 
-  @override
-  CartPageState createState() => CartPageState();
-}
+  const CartPage({super.key, required this.cartService});
 
-class CartPageState extends State<CartPage> {
+  void _checkout(BuildContext context) async {
+    try {
+      await cartService.placeOrder();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Order placed successfully!")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Checkout failed: $e")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Your Cart')),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: widget.cartService.cartItems,
+      appBar: AppBar(title: const Text("Your Cart")),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: cartService.cartStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+          final items = snapshot.data ?? [];
 
-          final cartItems = snapshot.data ?? [];
-
-          if (cartItems.isEmpty) {
-            return const Center(child: Text('Your cart is empty'));
+          if (items.isEmpty) {
+            return const Center(child: Text("Your cart is empty."));
           }
 
           return ListView.builder(
-            itemCount: cartItems.length,
+            itemCount: items.length,
             itemBuilder: (context, index) {
-              final item = cartItems[index];
-
-              return ListTile(
-                leading:
-                    item['image'] != null
-                        ? Image.network(
-                          item['image'],
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        )
-                        : const Icon(Icons.image_not_supported),
-                title: Text(item['name']),
-                subtitle: Text(
-                  'Price: \$${(item['price'] ?? 0).toStringAsFixed(2)}',
-                ),
-                trailing: SizedBox(
-                  width: 120,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+              final item = items[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: ListTile(
+                  leading:
+                      item['image'] != null && item['image'].isNotEmpty
+                          ? Image.network(
+                            item['image'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) =>
+                                    const Icon(Icons.broken_image),
+                          )
+                          : const Icon(Icons.image_not_supported, size: 50),
+                  title: Text(item['name']),
+                  subtitle: Text("₹${item['price']} x ${item['quantity']}"),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
                         icon: const Icon(Icons.remove),
-                        onPressed: () async {
-                          await widget.cartService.decrementQuantity(
-                            item['name'],
-                          );
-                          setState(() {});
-                        },
+                        tooltip: 'Decrease quantity',
+                        onPressed:
+                            () => cartService.decrementQuantity(item['name']),
                       ),
-                      Text('${item['quantity']}'),
+                      Text("${item['quantity']}"),
                       IconButton(
                         icon: const Icon(Icons.add),
-                        onPressed: () async {
-                          await widget.cartService.incrementQuantity(
-                            item['name'],
-                          );
-                          setState(() {});
-                        },
+                        tooltip: 'Increase quantity',
+                        onPressed:
+                            () => cartService.incrementQuantity(item['name']),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () async {
-                          await widget.cartService.removeFromCart(item['name']);
-                          setState(() {});
-                        },
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        tooltip: 'Remove from cart',
+                        onPressed:
+                            () => cartService.removeFromCart(item['name']),
                       ),
                     ],
                   ),
@@ -90,26 +87,29 @@ class CartPageState extends State<CartPage> {
           );
         },
       ),
-      bottomNavigationBar: FutureBuilder<double>(
-        future: widget.cartService.getTotalPrice(),
+      bottomNavigationBar: StreamBuilder<double>(
+        stream: cartService.totalPriceStream(),
+        initialData: 0.0,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Calculating total...',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            );
-          }
-
-          final total = snapshot.data ?? 0.0;
-
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Total: \$${total.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          final total = snapshot.data?.toStringAsFixed(2) ?? "0.00";
+          return Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.black,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total: ₹$total",
+                  style: const TextStyle(fontSize: 18, color: Colors.white),
+                ),
+                ElevatedButton(
+                  onPressed: () => _checkout(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
+                  child: const Text("Checkout"),
+                ),
+              ],
             ),
           );
         },

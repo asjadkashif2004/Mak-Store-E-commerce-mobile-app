@@ -1,61 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'register_page.dart';
-import 'home_page.dart'; // ✅ Importing the actual homepage with drawer and banner
+import 'home_page.dart';
+import 'cart_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const ben10Green = Color(0xFFBFFF00); // Neon green
+    const primaryColor = Color(0xFF1565C0);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
         child: Column(
           children: [
-            // Curved Header
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 30),
-              decoration: const BoxDecoration(
-                color: ben10Green,
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(40),
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+            const Icon(Icons.login, size: 60, color: primaryColor),
+            const SizedBox(height: 10),
+            const Text(
+              'MAK Store',
+              style: TextStyle(
+                fontFamily: 'Lobster',
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                letterSpacing: 2,
+                shadows: [
+                  Shadow(
+                    color: Colors.grey,
+                    blurRadius: 4,
+                    offset: Offset(2, 2),
                   ),
-                ),
+                ],
               ),
             ),
-            const SizedBox(height: 40),
-
+            const SizedBox(height: 20),
             Card(
-              color: Colors.grey[900],
+              color: Colors.grey[50],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              elevation: 12,
+              elevation: 10,
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'Welcome Back',
+                      'Login',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: ben10Green,
+                        color: primaryColor,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -73,7 +72,7 @@ class LoginPage extends StatelessWidget {
                       child: const Text(
                         "Don't have an account? Register",
                         style: TextStyle(
-                          color: ben10Green,
+                          color: primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -97,8 +96,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -113,21 +112,20 @@ class _LoginFormState extends State<LoginForm> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      final userId = userCredential.user?.uid;
+      if (userId == null) throw Exception('User ID is null');
+
+      final cartService = CartService(userId);
 
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ), // ✅ Uses real homepage
+        MaterialPageRoute(builder: (_) => HomePage(cartService: cartService)),
       );
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
@@ -141,36 +139,32 @@ class _LoginFormState extends State<LoginForm> {
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    const ben10Green = Color(0xFFBFFF00);
+    const primaryColor = Color(0xFF1565C0);
 
     return Column(
       children: [
         TextField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             labelText: 'Email',
-            labelStyle: const TextStyle(color: ben10Green),
-            prefixIcon: const Icon(Icons.email, color: ben10Green),
+            labelStyle: const TextStyle(color: primaryColor),
+            prefixIcon: const Icon(Icons.email, color: primaryColor),
             filled: true,
-            fillColor: Colors.black,
+            fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ben10Green),
+              borderSide: const BorderSide(color: primaryColor),
               borderRadius: BorderRadius.circular(12),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ben10Green, width: 2),
+              borderSide: const BorderSide(color: primaryColor, width: 2),
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -179,30 +173,28 @@ class _LoginFormState extends State<LoginForm> {
         TextField(
           controller: _passwordController,
           obscureText: _obscurePassword,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             labelText: 'Password',
-            labelStyle: const TextStyle(color: ben10Green),
-            prefixIcon: const Icon(Icons.lock, color: ben10Green),
+            labelStyle: const TextStyle(color: primaryColor),
+            prefixIcon: const Icon(Icons.lock, color: primaryColor),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: ben10Green,
+                color: primaryColor,
               ),
               onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
+                setState(() => _obscurePassword = !_obscurePassword);
               },
             ),
             filled: true,
-            fillColor: Colors.black,
+            fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ben10Green),
+              borderSide: const BorderSide(color: primaryColor),
               borderRadius: BorderRadius.circular(12),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: ben10Green, width: 2),
+              borderSide: const BorderSide(color: primaryColor, width: 2),
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -214,20 +206,20 @@ class _LoginFormState extends State<LoginForm> {
           child: ElevatedButton(
             onPressed: _isLoading ? null : _login,
             style: ElevatedButton.styleFrom(
-              backgroundColor: ben10Green,
+              backgroundColor: primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child:
                 _isLoading
-                    ? const CircularProgressIndicator(color: Colors.black)
+                    ? const CircularProgressIndicator(color: Colors.white)
                     : const Text(
                       'Login',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
           ),

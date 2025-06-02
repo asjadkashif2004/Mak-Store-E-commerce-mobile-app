@@ -47,13 +47,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // Removed const constructor since cartService is not const
   MyApp({super.key});
 
   static const Color ben10Green = Color(0xFF4CAF50);
-
-  // Assuming CartService requires a positional argument, provide one here (replace 'defaultId' accordingly)
-  final CartService cartService = CartService('defaultId');
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +90,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        '/home': (context) => const home.HomePage(),
         '/category': (context) => const CategoryPage(),
-        // Removed cartService named argument from below since it's not defined in those constructors
         '/electronics': (context) => const ElectronicsProductsPage(),
         '/fashion': (context) => const FashionProductsPage(),
         '/kitchen': (context) => const KitchenProductsPage(),
@@ -112,7 +106,9 @@ class MyApp extends StatelessWidget {
             );
           }
           if (snapshot.hasData) {
-            return const home.HomePage();
+            final user = snapshot.data!;
+            final cartService = CartService(user.uid);
+            return home.HomePage(cartService: cartService);
           } else {
             return const login.LoginPage();
           }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_page.dart';
+import 'login_page.dart'; // Make sure LoginPage is defined here
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,8 +15,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
   bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
 
   void _registerUser() async {
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -57,95 +58,133 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    const ben10Green = Color(0xFFBFFF00);
+    const primaryColor = Color(0xFF1565C0);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
         child: Column(
           children: [
-            // Curved Header
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 30),
-              decoration: BoxDecoration(
-                color: ben10Green,
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(40),
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Register',
+            // Header with icon and title
+            Column(
+              children: const [
+                Icon(Icons.app_registration, size: 60, color: primaryColor),
+                SizedBox(height: 10),
+                Text(
+                  'MAK Store',
                   style: TextStyle(
-                    fontSize: 28,
+                    fontFamily: 'Lobster',
+                    fontSize: 36,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
+                    letterSpacing: 2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.grey,
+                        blurRadius: 4,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                 ),
+                SizedBox(height: 20),
+              ],
+            ),
+
+            Card(
+              color: Colors.grey[50],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-            ),
-            const SizedBox(height: 40),
-
-            _buildTextField(
-              controller: _emailController,
-              hintText: 'Email',
-              icon: Icons.email,
-              ben10Green: ben10Green,
-            ),
-            const SizedBox(height: 20),
-
-            _buildTextField(
-              controller: _passwordController,
-              hintText: 'Password',
-              icon: Icons.lock,
-              isPassword: true,
-              ben10Green: ben10Green,
-            ),
-            const SizedBox(height: 20),
-
-            _buildTextField(
-              controller: _confirmPasswordController,
-              hintText: 'Confirm Password',
-              icon: Icons.lock_outline,
-              isPassword: true,
-              ben10Green: ben10Green,
-            ),
-            const SizedBox(height: 30),
-
-            _isLoading
-                ? const CircularProgressIndicator(color: ben10Green)
-                : SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _registerUser,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ben10Green,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  children: [
+                    const Text(
                       'Register',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
+                        color: primaryColor,
                       ),
                     ),
-                  ),
-                ),
-            const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'Back to Login',
-                style: TextStyle(
-                  color: ben10Green,
-                  fontWeight: FontWeight.bold,
+                    _buildTextField(
+                      controller: _emailController,
+                      label: 'Email',
+                      icon: Icons.email,
+                      obscureText: false,
+                    ),
+                    const SizedBox(height: 16),
+
+                    _buildTextField(
+                      controller: _passwordController,
+                      label: 'Password',
+                      icon: Icons.lock,
+                      obscureText: _obscurePassword,
+                      toggleVisibility: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    _buildTextField(
+                      controller: _confirmPasswordController,
+                      label: 'Confirm Password',
+                      icon: Icons.lock_outline,
+                      obscureText: _obscureConfirm,
+                      toggleVisibility: () {
+                        setState(() {
+                          _obscureConfirm = !_obscureConfirm;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 24),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _registerUser,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child:
+                            _isLoading
+                                ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                                : const Text(
+                                  'Register',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'Back to Login',
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -157,27 +196,39 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildTextField({
     required TextEditingController controller,
-    required String hintText,
+    required String label,
     required IconData icon,
-    required Color ben10Green,
-    bool isPassword = false,
+    required bool obscureText,
+    VoidCallback? toggleVisibility,
   }) {
+    const primaryColor = Color(0xFF1565C0);
+
     return TextField(
       controller: controller,
-      obscureText: isPassword,
-      style: const TextStyle(color: Colors.white),
+      obscureText: obscureText,
+      style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: ben10Green),
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
+        labelText: label,
+        labelStyle: const TextStyle(color: primaryColor),
+        prefixIcon: Icon(icon, color: primaryColor),
+        suffixIcon:
+            toggleVisibility != null
+                ? IconButton(
+                  icon: Icon(
+                    obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: primaryColor,
+                  ),
+                  onPressed: toggleVisibility,
+                )
+                : null,
         filled: true,
-        fillColor: Colors.grey[900],
+        fillColor: Colors.white,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: ben10Green),
+          borderSide: const BorderSide(color: primaryColor),
           borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: ben10Green, width: 2),
+          borderSide: const BorderSide(color: primaryColor, width: 2),
           borderRadius: BorderRadius.circular(12),
         ),
       ),
