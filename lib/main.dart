@@ -47,7 +47,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   static const Color ben10Green = Color(0xFF4CAF50);
 

@@ -71,7 +71,6 @@ class _HomePageState extends State<HomePage> {
     'Logout',
   ];
 
-  // Map menu items to icons
   final Map<String, IconData> menuIcons = {
     'Home': Icons.home,
     'Category': Icons.category,
@@ -80,6 +79,57 @@ class _HomePageState extends State<HomePage> {
     'Profile': Icons.person,
     'Logout': Icons.logout,
   };
+
+  // Animated welcome message (fade-in)
+  Widget _animatedWelcomeMessage() {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: 1),
+      duration: const Duration(seconds: 2),
+      builder: (context, opacity, child) {
+        return Opacity(opacity: opacity, child: child);
+      },
+      child: const Text(
+        'Welcome to MAK Store!',
+        style: TextStyle(
+          fontFamily: 'Lobster',
+          fontSize: 28,
+          color: Colors.black87,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  // Category icon button widget
+  Widget _categoryIconButton(String label, IconData icon, Widget page) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+      },
+      child: Container(
+        width: 80,
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.green.shade100,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 36, color: Colors.green.shade700),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                         );
                         break;
                       case 'Home':
-                        // Maybe pop until home or do nothing since already home
+                        // Already home
                         break;
                       default:
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -171,9 +221,13 @@ class _HomePageState extends State<HomePage> {
             // Search Banner
             TextField(
               controller: _searchController,
+              style: const TextStyle(
+                color: Colors.black,
+              ), // Black input text color
               decoration: InputDecoration(
                 hintText: 'Search Categories (e.g. Electronics)',
-                prefixIcon: const Icon(Icons.search),
+                hintStyle: const TextStyle(color: Colors.black54),
+                prefixIcon: const Icon(Icons.search, color: Colors.black54),
                 filled: true,
                 fillColor: Colors.grey.shade200,
                 border: OutlineInputBorder(
@@ -191,7 +245,48 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 20),
 
-            // Responsive Banner Image
+            // Category Icons Row - Centered
+            Center(
+              child: SizedBox(
+                height: 110,
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    _categoryIconButton(
+                      'Electronics',
+                      Icons.devices,
+                      const ElectronicsProductsPage(),
+                    ),
+                    _categoryIconButton(
+                      'Sports',
+                      Icons.sports_soccer,
+                      const SportsProductsPage(),
+                    ),
+                    _categoryIconButton(
+                      'Kitchen',
+                      Icons.kitchen,
+                      const KitchenProductsPage(),
+                    ),
+                    _categoryIconButton(
+                      'Books',
+                      Icons.book,
+                      const BooksProductsPage(),
+                    ),
+                    _categoryIconButton(
+                      'Fashion',
+                      Icons.shopping_bag,
+                      const FashionProductsPage(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Banner Image
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.asset(
@@ -204,21 +299,12 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 30),
 
-            // Welcome Text
-            const Text(
-              'Welcome to MAK Store!',
-              style: TextStyle(
-                fontFamily: 'Lobster',
-                fontSize: 28,
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            // Animated Welcome Message
+            _animatedWelcomeMessage(),
 
             const SizedBox(height: 16),
 
-            // Stylish description paragraph about the app
+            // Description paragraph
             const Text(
               'Discover a wide range of products from electronics, fashion, kitchen essentials, books, and sports gear — all at your fingertips. Enjoy a smooth shopping experience with our user-friendly interface and secure checkout.',
               style: TextStyle(
@@ -231,7 +317,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 60),
 
-            // Footer text aligned to bottom right
+            // Footer Text
             Align(
               alignment: Alignment.bottomRight,
               child: Text(
