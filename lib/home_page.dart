@@ -10,6 +10,7 @@ import 'fashion.dart';
 import 'kitchen.dart';
 import 'books.dart';
 import 'sports.dart';
+import 'medicines.dart';
 
 class HomePage extends StatefulWidget {
   final CartService cartService;
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> {
     'kitchen': const KitchenProductsPage(),
     'books': const BooksProductsPage(),
     'sports': const SportsProductsPage(),
+    'medicines': const MedicinesProductsPage(),
   };
 
   void logout() async {
@@ -279,6 +281,11 @@ class _HomePageState extends State<HomePage> {
                       Icons.shopping_bag,
                       const FashionProductsPage(),
                     ),
+                    _categoryIconButton(
+                      'Medicines',
+                      Icons.medical_services,
+                      const MedicinesProductsPage(),
+                    ),
                   ],
                 ),
               ),
@@ -299,7 +306,6 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 30),
 
-            // Animated Welcome Message
             _animatedWelcomeMessage(),
 
             const SizedBox(height: 16),

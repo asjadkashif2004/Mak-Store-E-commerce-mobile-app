@@ -12,6 +12,7 @@ import 'fashion.dart';
 import 'kitchen.dart';
 import 'books.dart';
 import 'sports.dart';
+import 'medicines.dart';
 
 // Your cart service import
 import 'cart_service.dart';
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
         '/kitchen': (context) => const KitchenProductsPage(),
         '/books': (context) => const BooksProductsPage(),
         '/sports': (context) => const SportsProductsPage(),
+        '/medicines': (context) => const MedicinesProductsPage(),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

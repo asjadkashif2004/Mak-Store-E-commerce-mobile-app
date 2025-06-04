@@ -1,51 +1,26 @@
 import 'package:flutter/material.dart';
 
-class BooksProductsPage extends StatelessWidget {
-  const BooksProductsPage({super.key});
+class MedicinesProductsPage extends StatelessWidget {
+  const MedicinesProductsPage({super.key});
 
-  final List<Map<String, dynamic>> products = const [
-    {
-      'name': 'Flutter Development',
-      'price': 19.99,
-      'description': 'Learn Flutter and Dart to build beautiful mobile apps.',
-      'image': 'assets/images/flutter_book.png',
-    },
-    {
-      'name': 'Data Science Essentials',
-      'price': 25.00,
-      'description': 'An introductory guide to data science concepts.',
-      'image': 'assets/images/data_science.png',
-    },
-    {
-      'name': 'Mystery Novel',
-      'price': 12.50,
-      'description': 'A thrilling mystery novel with unexpected twists.',
-      'image': 'assets/images/novel.png',
-    },
-
-    {
-      'name': 'Cooking Made Easy',
-      'price': 15.75,
-      'description': 'Simple and delicious recipes for everyday cooking.',
-      'image': 'assets/images/cooking_book.png',
-    },
-  ];
-
-  void showProductDetails(BuildContext context, Map<String, dynamic> product) {
-    showDialog(
+  Future<void> showProductDetails(
+    BuildContext context,
+    Map<String, dynamic> product,
+  ) async {
+    return showDialog<void>(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text(product['name']),
+            title: Text(product['name'] ?? ''),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(product['image'], height: 100),
+                Image.asset(product['image'] ?? '', height: 100),
                 const SizedBox(height: 10),
-                Text(product['description']),
+                Text(product['description'] ?? ''),
                 const SizedBox(height: 10),
                 Text(
-                  'Price: \$${product['price'].toStringAsFixed(2)}',
+                  'Price: \$${(product['price'] ?? 0).toStringAsFixed(2)}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -74,8 +49,27 @@ class BooksProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> products = [
+      {
+        'name': 'Panadol',
+        'price': 2.00,
+        'description': 'Effective pain relief for headaches and minor aches.',
+        'image': 'assets/images/panadol.png',
+      },
+      {
+        'name': 'Paracetamol',
+        'price': 12.00,
+        'description':
+            'Pain reliever and fever reducer for adults and children.',
+        'image': 'assets/images/paracetamol.jpeg',
+      },
+    ];
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Books'), backgroundColor: Colors.green),
+      appBar: AppBar(
+        title: const Text('Medicines & Health Products'),
+        backgroundColor: Colors.green,
+      ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: products.length,
@@ -89,13 +83,13 @@ class BooksProductsPage extends StatelessWidget {
             elevation: 4,
             child: ListTile(
               leading: Image.asset(
-                product['image'],
+                product['image'] ?? '',
                 width: 60,
                 height: 60,
                 fit: BoxFit.contain,
               ),
-              title: Text(product['name']),
-              subtitle: Text('\$${product['price'].toStringAsFixed(2)}'),
+              title: Text(product['name'] ?? ''),
+              subtitle: Text('\$${(product['price'] ?? 0).toStringAsFixed(2)}'),
               trailing: IconButton(
                 icon: const Icon(Icons.add_shopping_cart, color: Colors.green),
                 onPressed: () {

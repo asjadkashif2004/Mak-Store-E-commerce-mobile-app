@@ -6,6 +6,7 @@ import 'fashion.dart';
 import 'kitchen.dart';
 import 'books.dart';
 import 'sports.dart';
+import 'medicines.dart';
 
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
@@ -35,6 +36,12 @@ class CategoryPage extends StatelessWidget {
       'title': 'Sports',
       'image': 'assets/images/sports1.png',
       'page': SportsProductsPage(),
+    },
+
+    {
+      'title': 'Medicines',
+      'image': 'assets/images/medicines.png',
+      'page': MedicinesProductsPage(),
     },
   ];
 
