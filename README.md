@@ -29,10 +29,10 @@ MAK Store was created as a fully functional Flutter-based e-commerce application
 
 - 🛒 **Cart Functionality**
   - Add items to cart from any category
-  - View, update, or remove items
   - Cart state is user-specific and stored in Firestore
 
-- 👤 **Profile Page**
+
+Other
   - View user info
   - Logout functionality
 
