@@ -9,11 +9,13 @@ class CartPage extends StatelessWidget {
   void _checkout(BuildContext context) async {
     try {
       await cartService.placeOrder();
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Order placed successfully!")),
       );
     } catch (e) {
       ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text("Checkout failed: $e")));
     }
@@ -22,6 +24,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(title: const Text("Your Cart")),
       body: StreamBuilder<List<Map<String, dynamic>>>(
         stream: cartService.cartStream(),

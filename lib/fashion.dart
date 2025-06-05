@@ -30,17 +30,26 @@ class FashionProductsPage extends StatelessWidget {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text(product['name']),
+            title: Text(
+              product['name'],
+              style: const TextStyle(color: Colors.black),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(product['image'], height: 100),
                 const SizedBox(height: 10),
-                Text(product['description']),
+                Text(
+                  product['description'],
+                  style: const TextStyle(color: Colors.black),
+                ),
                 const SizedBox(height: 10),
                 Text(
                   'Price: \$${product['price'].toStringAsFixed(2)}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -69,6 +78,7 @@ class FashionProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Fashion'),
         backgroundColor: Colors.green,
@@ -79,6 +89,7 @@ class FashionProductsPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final product = products[index];
           return Card(
+            color: Colors.green[100], // Soft green background
             margin: const EdgeInsets.symmetric(vertical: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -91,10 +102,19 @@ class FashionProductsPage extends StatelessWidget {
                 height: 60,
                 fit: BoxFit.contain,
               ),
-              title: Text(product['name']),
-              subtitle: Text('\$${product['price'].toStringAsFixed(2)}'),
+              title: Text(
+                product['name'],
+                style: const TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(
+                '\$${product['price'].toStringAsFixed(2)}',
+                style: const TextStyle(color: Colors.black),
+              ),
               trailing: IconButton(
-                icon: const Icon(Icons.add_shopping_cart, color: Colors.green),
+                icon: const Icon(
+                  Icons.add_shopping_cart,
+                  color: Colors.black,
+                ), // Black icon
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

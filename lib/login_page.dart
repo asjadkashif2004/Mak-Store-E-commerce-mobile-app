@@ -10,7 +10,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF1565C0);
+    const primaryColor = Color(0xFF4CAF50);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -145,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF1565C0);
+    const primaryColor = Color(0xFF4CAF50);
 
     return Column(
       children: [

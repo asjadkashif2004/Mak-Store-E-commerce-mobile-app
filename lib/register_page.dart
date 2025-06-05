@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_page.dart'; // Make sure LoginPage is defined here
+import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -58,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF1565C0);
+    const primaryColor = Color(0xFF4CAF50);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -66,7 +66,6 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
         child: Column(
           children: [
-            // Header with icon and title
             Column(
               children: const [
                 Icon(Icons.app_registration, size: 60, color: primaryColor),
@@ -91,7 +90,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(height: 20),
               ],
             ),
-
             Card(
               color: Colors.grey[50],
               shape: RoundedRectangleBorder(
@@ -111,7 +109,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     _buildTextField(
                       controller: _emailController,
                       label: 'Email',
@@ -119,7 +116,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: false,
                     ),
                     const SizedBox(height: 16),
-
                     _buildTextField(
                       controller: _passwordController,
                       label: 'Password',
@@ -132,7 +128,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     const SizedBox(height: 16),
-
                     _buildTextField(
                       controller: _confirmPasswordController,
                       label: 'Confirm Password',
@@ -145,7 +140,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                     const SizedBox(height: 24),
-
                     SizedBox(
                       width: double.infinity,
                       height: 48,
@@ -173,7 +167,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: const Text(
@@ -201,7 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
     required bool obscureText,
     VoidCallback? toggleVisibility,
   }) {
-    const primaryColor = Color(0xFF1565C0);
+    const primaryColor = Color(0xFF4CAF50);
 
     return TextField(
       controller: controller,
@@ -223,9 +216,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 : null,
         filled: true,
         fillColor: Colors.white,
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: primaryColor),
-          borderRadius: BorderRadius.circular(12),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: primaryColor, width: 2),
