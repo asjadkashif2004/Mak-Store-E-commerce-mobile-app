@@ -8,6 +8,18 @@ MAK Store is a modern e-commerce mobile application developed using Flutter and 
 
 MAK Store was created as a fully functional Flutter-based e-commerce application. It allows authenticated users to access various product categories, explore items, and manage their cart. The app uses **Firebase Authentication** for secure login/register functionality, and **Cloud Firestore** as the backend database to store product and cart data. A clean UI and modular structure ensure scalability and maintainability.
 
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/2ef41525-90d7-4002-9f80-6e10f23aa475)
+
+
+
+
+
+
 ---
 
 ## ✨ Features
@@ -80,6 +92,9 @@ screen shot
 
 
 VIDEO LINK :
+
+
+https://github.com/asjadkashif2004/Mak-Store-E-commerce-mobile-app/issues/1#issue-3117359694
 
 
 https://youtu.be/t85GLPo-S-Y
