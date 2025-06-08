@@ -66,30 +66,26 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
         child: Column(
           children: [
-            Column(
-              children: const [
-                Icon(Icons.app_registration, size: 60, color: primaryColor),
-                SizedBox(height: 10),
-                Text(
-                  'MAK Store',
-                  style: TextStyle(
-                    fontFamily: 'Lobster',
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    letterSpacing: 2,
-                    shadows: [
-                      Shadow(
-                        color: Colors.grey,
-                        blurRadius: 4,
-                        offset: Offset(2, 2),
-                      ),
-                    ],
+            Image.asset('assets/images/frontlogo.png', height: 80),
+            const SizedBox(height: 10),
+            const Text(
+              'MAK Store',
+              style: TextStyle(
+                fontFamily: 'Lobster',
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                letterSpacing: 2,
+                shadows: [
+                  Shadow(
+                    color: Colors.grey,
+                    blurRadius: 4,
+                    offset: Offset(2, 2),
                   ),
-                ),
-                SizedBox(height: 20),
-              ],
+                ],
+              ),
             ),
+            const SizedBox(height: 20),
             Card(
               color: Colors.grey[50],
               shape: RoundedRectangleBorder(

@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
         child: Column(
           children: [
-            const Icon(Icons.login, size: 60, color: primaryColor),
+            Image.asset('assets/images/frontlogo.png', height: 80),
             const SizedBox(height: 10),
             const Text(
               'MAK Store',

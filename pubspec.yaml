@@ -22,12 +22,19 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/frontlogo.png"  # Make sure this file exists and is square
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
+
 fonts:
     - family: Lobster
       fonts:
